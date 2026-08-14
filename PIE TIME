@@ -1,0 +1,247 @@
+
+## למה הכתובת השתנתה
+
+זה בגלל **PIE (Position Independent Executable)** בשילוב עם **ASLR (Address Space Layout Randomization)**.
+
+**ההסבר:**
+
+כשאתה מריץ `disas main` לפני שהתוכנית רצה, gdb מציג את הכתובות כפי שהן **מקודדות בקובץ הבינארי עצמו** (הקובץ ELF). אלו כתובות **יחסיות** (offsets) בתוך הקובץ - למשל `0x133d`. זו לא כתובת "אמיתית" בזיכרון, אלא המיקום התיאורטי אם הקובץ היה נטען בכתובת בסיס 0.
+
+כשהתוכנית קומפלה כ-**PIE** (זה ברירת המחדל כיום ברוב הדיסטרוציות של לינוקס, כולל קאלי), הקובץ אינו exe רגיל עם כתובות קבועות - הוא בעצם מתנהג כמו shared library. המשמעות היא שבזמן ריצה, הליבה (kernel) טוענת את כל התוכנית לכתובת בסיס **אקראית** בזיכרון הווירטואלי, ואז מוסיפה את ה-offset המקורי לכתובת הבסיס הזו.
+
+זה מה שקורה כאן:
+```
+כתובת הבסיס האקראית: 0x555555554000  (בערך)
++ ה-offset המקורי:     0x0000000000133d
+= הכתובת בזמן ריצה:    0x55555555533d
+```
+
+שים לב שהחלק האחרון `33d` נשאר זהה - זה בדיוק ה-offset שראית ב-`disas`. רק ה"קידומת" (הבייטים הגבוהים) השתנתה, כי היא נקבעת אקראית בכל הרצה.
+
+**המטרה האבטחתית:** ASLR נועד להקשות על תוקפים לנצל באגים כמו buffer overflow, כי הם לא יכולים לדעת מראש היכן פונקציות או משתנים ממוקמים בזיכרון - הכתובות משתנות בכל הרצה מחדש.
+
+**טיפ לדיבוג:** אם אתה רוצה לבטל את האקראיות הזו זמנית בתוך gdb (נוח מאוד ל-debugging), אפשר להריץ:
+```
+disable-randomization on
+```
+(זו בדרך כלל ברירת המחדל ב-gdb בכל מקרה - gdb בדרך כלל מכבה ASLR לתהליכים שהוא מריץ, אלא אם משנים את זה).
+
+Non-debugging symbols:
+0x0000555555555000  _init
+0x00005555555550e0  __cxa_finalize@plt
+0x00005555555550f0  putchar@plt
+0x0000555555555100  puts@plt
+0x0000555555555110  fclose@plt
+0x0000555555555120  __stack_chk_fail@plt
+0x0000555555555130  printf@plt
+0x0000555555555140  fgetc@plt
+0x0000555555555150  signal@plt
+0x0000555555555160  setvbuf@plt
+0x0000555555555170  fopen@plt
+0x0000555555555180  __isoc99_scanf@plt
+0x0000555555555190  exit@plt
+0x00005555555551a0  _start
+0x00005555555551d0  deregister_tm_clones
+0x0000555555555200  register_tm_clones
+0x0000555555555240  __do_global_dtors_aux
+0x0000555555555280  frame_dummy
+0x0000555555555289  segfault_handler
+0x00005555555552a7  win
+0x000055555555533d  main
+0x0000555555555410  __libc_csu_init
+0x0000555555555480  __libc_csu_fini
+0x0000555555555488  _fini
+0x00007ffff7fc48a0  __vdso_gettimeofday
+0x00007ffff7fc48a0  gettimeofday
+0x00007ffff7fc4b90  __vdso_time
+0x00007ffff7fc4b90  time
+0x00007ffff7fc4bc0  __vdso_clock_gettime
+0x00007ffff7fc4bc0  clock_gettime
+0x00007ffff7fc4f70  __vdso_clock_getres
+0x00007ffff7fc4f70  clock_getres
+0x00007ffff7fc4fe0  __vdso_getcpu
+0x00007ffff7fc4fe0  getcpu
+0x00007ffff7fc5020  __vdso_getrandom
+0x00007ffff7fc5020  getrandom
+0x00007ffff7fc5560  __vdso_sgx_enter_enclave
+0x00007ffff7f37fd0  __popcountdi2
+0x00007ffff7f38030  __addtf3
+0x00007ffff7f39590  __divtf3
+0x00007ffff7f3a290  __multf3
+0x00007ffff7f3aeb0  __subtf3
+0x00007ffff7f3c480  __unordtf2
+0x00007ffff7f3c660  __floatsitf
+0x00007ffff7f3c6f0  __getf2
+0x00007ffff7f3c6f0  __gttf2
+0x00007ffff7f3ca40  __letf2
+0x00007ffff7f3ca40  __lttf2
+0x00007ffff7f3cd90  __eqtf2
+0x00007ffff7f3cd90  __netf2
+0x00007ffff7f3d030  __sfp_handle_exceptions
+0x00007ffff7dd4010  *ABS*+0xada80@plt
+0x00007ffff7dd4020  realloc@plt
+0x00007ffff7dd4030  *ABS*+0xad7a0@plt
+0x00007ffff7dd4040  *ABS*+0xaaa70@plt
+0x00007ffff7dd4050  *ABS*+0xce0f0@plt
+0x00007ffff7dd4060  calloc@plt
+0x00007ffff7dd4070  *ABS*+0xc0ab0@plt
+0x00007ffff7dd4080  *ABS*+0xadd20@plt
+0x00007ffff7dd4090  *ABS*+0xa9f90@plt
+0x00007ffff7dd40a0  *ABS*+0xaa960@plt
+0x00007ffff7dd40b0  *ABS*+0xcdfd0@plt
+0x00007ffff7dd40c0  *ABS*+0xaade0@plt
+0x00007ffff7dd40d0  *ABS*+0x120b80@plt
+0x00007ffff7dd40e0  *ABS*+0xce050@plt
+0x00007ffff7dd40f0  _dl_find_dso_for_object@plt
+0x00007ffff7dd4100  *ABS*+0xad9e0@plt
+0x00007ffff7dd4110  *ABS*+0xad720@plt
+0x00007ffff7dd4120  *ABS*+0xc0e00@plt
+0x00007ffff7dd4130  *ABS*+0xaaf50@plt
+0x00007ffff7dd4140  *ABS*+0xacc50@plt
+0x00007ffff7dd4150  *ABS*+0xc0e70@plt
+0x00007ffff7dd4160  _dl_deallocate_tls@plt
+0x00007ffff7dd4170  __tls_get_addr@plt
+0x00007ffff7dd4180  *ABS*+0xce0f0@plt
+0x00007ffff7dd4190  *ABS*+0xaa010@plt
+0x00007ffff7dd41a0  *ABS*+0xaba80@plt
+0x00007ffff7dd41b0  *ABS*+0xad840@plt
+0x00007ffff7dd41c0  _dl_signal_error@plt
+0x00007ffff7dd41d0  *ABS*+0xab9a0@plt
+0x00007ffff7dd41e0  *ABS*+0xc1ea0@plt
+0x00007ffff7dd41f0  *ABS*+0xaccc0@plt
+0x00007ffff7dd4200  *ABS*+0xaaeb0@plt
+0x00007ffff7dd4210  *ABS*+0xad940@plt
+0x00007ffff7dd4220  *ABS*+0xcdfd0@plt
+0x00007ffff7dd4230  _dl_signal_exception@plt
+0x00007ffff7dd4240  *ABS*+0xaae50@plt
+0x00007ffff7dd4250  *ABS*+0xc0f10@plt
+0x00007ffff7dd4260  _dl_audit_symbind_alt@plt
+0x00007ffff7dd4270  *ABS*+0xadb30@plt
+0x00007ffff7dd4280  *ABS*+0x120da0@plt
+0x00007ffff7dd4290  *ABS*+0xaba10@plt
+0x00007ffff7dd42a0  __tunable_is_initialized@plt
+0x00007ffff7dd42b0  *ABS*+0xc0e70@plt
+0x00007ffff7dd42c0  *ABS*+0xaa0f0@plt
+0x00007ffff7dd42d0  *ABS*+0xc2920@plt
+0x00007ffff7dd42e0  _dl_rtld_di_serinfo@plt
+0x00007ffff7dd42f0  *ABS*+0xaab80@plt
+0x00007ffff7dd4300  *ABS*+0x120a70@plt
+0x00007ffff7dd4310  _dl_allocate_tls@plt
+0x00007ffff7dd4320  *ABS*+0x120c90@plt
+0x00007ffff7dd4330  __tunable_get_val@plt
+0x00007ffff7dd4340  *ABS*+0xc2080@plt
+0x00007ffff7dd4350  *ABS*+0xaac00@plt
+0x00007ffff7dd4360  *ABS*+0xc2990@plt
+0x00007ffff7dd4370  _dl_catch_exception@plt
+0x00007ffff7dd4380  *ABS*+0xabb00@plt
+0x00007ffff7dd4390  _dl_allocate_tls_init@plt
+0x00007ffff7dd43a0  *ABS*+0xadb00@plt
+0x00007ffff7dd43b0  _dl_audit_preinit@plt
+0x00007ffff7dd43c0  *ABS*+0xada80@plt
+0x00007ffff7dd43d0  free@plt
+0x00007ffff7dd43d8  malloc@plt
+
+בטח. נפרק כל שורה ממש בפשטות.
+
+1. signal(SIGSEGV, segfault_handler);
+signal(SIGSEGV, segfault_handler);
+
+המשמעות:
+
+"אם התוכנית מקבלת SIGSEGV, תפעיל את הפונקציה segfault_handler."
+
+מה זה SIGSEGV?
+
+SIGSEGV הוא signal שהתוכנית מקבלת כשיש גישה לא חוקית לזיכרון.
+
+לדוגמה:
+
+int *p = NULL;
+*p = 10;
+
+התוכנית מנסה לכתוב לכתובת זיכרון שאסור לה לגשת אליה → בדרך כלל מתקבל SIGSEGV.
+
+ומה זה segfault_handler?
+
+נניח שהגדרנו:
+
+void segfault_handler(int sig) {
+    printf("Segmentation fault!\n");
+}
+
+אז:
+
+signal(SIGSEGV, segfault_handler);
+
+אומר למערכת:
+
+קורה SIGSEGV
+      ↓
+תפעיל segfault_handler
+      ↓
+segfault_handler(SIGSEGV)
+
+כלומר signal() בעצם אומר:
+
+"כשאירוע X קורה, תפעיל את הפונקציה Y."
+
+שים לב שלא כותבים:
+
+signal(SIGSEGV, segfault_handler());
+
+כי אנחנו לא רוצים להפעיל אותה עכשיו. אנחנו נותנים ל-signal את הכתובת של הפונקציה, כדי שהיא תוכל להפעיל אותה בעתיד.
+
+2. setvbuf(stdout, NULL, _IONBF, 0);
+setvbuf(stdout, NULL, _IONBF, 0);
+
+השורה הזאת קשורה ל-buffer של printf.
+
+מה זה buffer?
+
+לפעמים כשאתה עושה:
+
+printf("Hello");
+
+הטקסט לא בהכרח מופיע מיד על המסך.
+
+התוכנית יכולה לשמור אותו זמנית בזיכרון שנקרא buffer, ואז להדפיס אותו מאוחר יותר.
+
+אפשר לדמיין:
+
+printf("Hello")
+      ↓
+   buffer
+      ↓
+   terminal
+אז מה עושה _IONBF?
+
+_IONBF אומר:
+
+No Buffering — אל תשתמש ב-buffer.
+
+לכן:
+
+setvbuf(stdout, NULL, _IONBF, 0);
+
+אומר:
+
+"עבור stdout, תבטל buffering."
+
+כלומר כשאתה עושה:
+
+printf("Hello\n");
+
+הפלט יישלח החוצה בלי לחכות שה-buffer יתמלא.
+
+
+──(kali㉿kali)-[~]
+└─$ nc rescued-float.picoctf.net 61452
+Address of main: 0x5c08db8ce33d
+Enter the address to jump to, ex => 0x12345: 0x5c08db8ce2a7
+Your input: 5c08db8ce2a7
+You won!
+picoCTF{b4s1c_p051t10n_1nd3p3nd3nc3_0392ebba}
+
+                                                                                      
+┌──(kali㉿kali)-[~]
+└─$ 
