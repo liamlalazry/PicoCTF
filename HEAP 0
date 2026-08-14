@@ -56,3 +56,8 @@ Heap State:
 5. Exit
 
 Enter your choice: ^C
+
+ls
+abyss_oracle.ko  bzImage  etc   init            proc         sbin  tmp
+bin              dev      home  initramfs.cpio  run-qemu.sh  sys
+
