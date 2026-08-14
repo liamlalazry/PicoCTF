@@ -1,0 +1,58 @@
+input_data = malloc(INPUT_DATA_SIZE); //IDS = 5 
+
+    strncpy(input_data, "pico", INPUT_DATA_SIZE); 
+
+is it includes NULL terminator in this strncpy action ?
+
+
+
+Yes — in this specific case, it includes the \0 terminator.
+
+──(kali㉿kali)-[~/Downloads]
+└─$ ./chall
+
+Welcome to heap0!
+I put my data on the heap so it should be safe from any tampering.
+Since my data isn't on the stack I'll even let you write whatever info you want to the heap, I already took care of using malloc for you.
+
+Heap State:
++-------------+----------------+
+[*] Address   ->   Heap Data   
++-------------+----------------+
+[*]   0x558685320720  ->   pico
++-------------+----------------+
+[*]   0x558685320740  ->   bico
++-------------+----------------+
+
+1. Print Heap:          (print the current state of the heap)
+2. Write to buffer:     (write to your own personal block of data on the heap)
+3. Print safe_var:      (I'll even let you look at my variable on the heap, I'm confident it can't be modified)
+4. Print Flag:          (Try to print the flag, good luck)
+5. Exit
+
+Enter your choice: 2
+Data for buffer: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+1. Print Heap:          (print the current state of the heap)
+2. Write to buffer:     (write to your own personal block of data on the heap)
+3. Print safe_var:      (I'll even let you look at my variable on the heap, I'm confident it can't be modified)
+4. Print Flag:          (Try to print the flag, good luck)
+5. Exit
+
+Enter your choice: 1
+Heap State:
++-------------+----------------+
+[*] Address   ->   Heap Data   
++-------------+----------------+
+[*]   0x558685320720  ->   aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
++-------------+----------------+
+[*]   0x558685320740  ->   aaaaaa
++-------------+----------------+
+
+1. Print Heap:          (print the current state of the heap)
+2. Write to buffer:     (write to your own personal block of data on the heap)
+3. Print safe_var:      (I'll even let you look at my variable on the heap, I'm confident it can't be modified)
+4. Print Flag:          (Try to print the flag, good luck)
+5. Exit
+
+Enter your choice: ^C
