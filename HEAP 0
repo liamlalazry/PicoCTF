@@ -62,3 +62,4 @@ abyss_oracle.ko  bzImage  etc   init            proc         sbin  tmp
 bin              dev      home  initramfs.cpio  run-qemu.sh  sys
 
 https://dd0155fe-9e0e-49a7-b37d-4edc584eea34.play.gaslightctf.cooking:1337/signup
+https://248dfb3b-3409-4660-bb16-ce7d715e0bbf.play.gaslightctf.cooking:1337
