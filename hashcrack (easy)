@@ -1,0 +1,198 @@
+┌──(kali㉿kali)-[~]
+└─$ hash-identifier b7a875fc1ea228b9061041b7cec4bd3c52ab3ce3   
+   #########################################################################
+   #     __  __                     __           ______    _____           #
+   #    /\ \/\ \                   /\ \         /\__  _\  /\  _ `\         #
+   #    \ \ \_\ \     __      ____ \ \ \___     \/_/\ \/  \ \ \/\ \        #
+   #     \ \  _  \  /'__`\   / ,__\ \ \  _ `\      \ \ \   \ \ \ \ \       #
+   #      \ \ \ \ \/\ \_\ \_/\__, `\ \ \ \ \ \      \_\ \__ \ \ \_\ \      #
+   #       \ \_\ \_\ \___ \_\/\____/  \ \_\ \_\     /\_____\ \ \____/      #
+   #        \/_/\/_/\/__/\/_/\/___/    \/_/\/_/     \/_____/  \/___/  v1.2 #
+   #                                                             By Zion3R #
+   #                                                    www.Blackploit.com #
+   #                                                   Root@Blackploit.com #
+   #########################################################################
+--------------------------------------------------
+
+Possible Hashs:
+[+] SHA-1
+[+] MySQL5 - SHA-1(SHA-1($pass))
+
+Least Possible Hashs:
+[+] Tiger-160
+[+] Haval-160
+[+] RipeMD-160
+[+] SHA-1(HMAC)
+[+] Tiger-160(HMAC)
+[+] RipeMD-160(HMAC)
+[+] Haval-160(HMAC)
+[+] SHA-1(MaNGOS)
+[+] SHA-1(MaNGOS2)
+[+] sha1($pass.$salt)
+[+] sha1($salt.$pass)
+[+] sha1($salt.md5($pass))
+[+] sha1($salt.md5($pass).$salt)
+[+] sha1($salt.sha1($pass))
+[+] sha1($salt.sha1($salt.sha1($pass)))
+[+] sha1($username.$pass)
+[+] sha1($username.$pass.$salt)
+[+] sha1(md5($pass))
+[+] sha1(md5($pass).$salt)
+[+] sha1(md5(sha1($pass)))
+[+] sha1(sha1($pass))
+[+] sha1(sha1($pass).$salt)
+[+] sha1(sha1($pass).substr($pass,0,3))
+[+] sha1(sha1($salt.$pass))
+[+] sha1(sha1(sha1($pass)))
+[+] sha1(strtolower($username).$pass)
+--------------------------------------------------
+ HASH: b7a875fc1ea228b9061041b7cec4bd3c52ab3ce3
+
+Possible Hashs:
+[+] SHA-1
+[+] MySQL5 - SHA-1(SHA-1($pass))
+
+Least Possible Hashs:
+[+] Tiger-160
+[+] Haval-160
+[+] RipeMD-160
+[+] SHA-1(HMAC)
+[+] Tiger-160(HMAC)
+[+] RipeMD-160(HMAC)
+[+] Haval-160(HMAC)
+[+] SHA-1(MaNGOS)
+[+] SHA-1(MaNGOS2)
+[+] sha1($pass.$salt)
+[+] sha1($salt.$pass)
+[+] sha1($salt.md5($pass))
+[+] sha1($salt.md5($pass).$salt)
+[+] sha1($salt.sha1($pass))
+[+] sha1($salt.sha1($salt.sha1($pass)))
+[+] sha1($username.$pass)
+[+] sha1($username.$pass.$salt)
+[+] sha1(md5($pass))
+[+] sha1(md5($pass).$salt)
+[+] sha1(md5(sha1($pass)))
+[+] sha1(sha1($pass))
+[+] sha1(sha1($pass).$salt)
+[+] sha1(sha1($pass).substr($pass,0,3))
+[+] sha1(sha1($salt.$pass))
+[+] sha1(sha1(sha1($pass)))
+[+] sha1(strtolower($username).$pass)
+--------------------------------------------------
+ HASH: ^C^C
+
+        Bye!
+                                                                                                                                        
+┌──(kali㉿kali)-[~]
+└─$ 
+                                                                                                                                        
+┌──(kali㉿kali)-[~]
+└─$ hashcat -m 0 -a 0 hash.txt /usr/share/wordlists/rockyou.txt
+                                                                                                                                        
+┌──(kali㉿kali)-[~]
+└─$ echo b7a875fc1ea228b9061041b7cec4bd3c52ab3ce3 > hash1.txt
+                                                                                                                                        
+┌──(kali㉿kali)-[~]
+└─$ ls    
+abc.txt  Documents  flaghasher      hash1.txt     ida-pro-9.4  Pictures    Public                 pwndbg     Videos
+Desktop  Downloads  flaghasher.i64  ida-free-9.4  Music        pimpmykali  pwn.college-Reversing  Templates
+                                                                                                                                        
+┌──(kali㉿kali)-[~]
+└─$ hashcat -m 100 -a 0 hash1.txt /usr/share/wordlists/rockyou.txt
+hashcat (v6.2.6) starting
+
+OpenCL API (OpenCL 3.0 PoCL 6.0+debian  Linux, None+Asserts, RELOC, SPIR-V, LLVM 18.1.8, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
+====================================================================================================================================================
+* Device #1: cpu-haswell-AMD Ryzen 7 7700X 8-Core Processor, 1438/2941 MB (512 MB allocatable), 3MCU
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+Hashes: 1 digests; 1 unique digests, 1 unique salts
+Bitmaps: 16 bits, 65536 entries, 0x0000ffff mask, 262144 bytes, 5/13 rotates
+Rules: 1
+
+Optimizers applied:
+* Zero-Byte
+* Early-Skip
+* Not-Salted
+* Not-Iterated
+* Single-Hash
+* Single-Salt
+* Raw-Hash
+
+ATTENTION! Pure (unoptimized) backend kernels selected.
+Pure kernels can crack longer passwords, but drastically reduce performance.
+If you want to switch to optimized kernels, append -O to your commandline.
+See the above message to find out about the exact limits.
+
+Watchdog: Temperature abort trigger set to 90c
+
+Host memory required for this attack: 0 MB
+
+Dictionary cache hit:
+* Filename..: /usr/share/wordlists/rockyou.txt
+* Passwords.: 14344385
+* Bytes.....: 139921507
+* Keyspace..: 14344385
+
+b7a875fc1ea228b9061041b7cec4bd3c52ab3ce3:letmein          
+                                                          
+Session..........: hashcat
+Status...........: Cracked
+Hash.Mode........: 100 (SHA1)
+Hash.Target......: b7a875fc1ea228b9061041b7cec4bd3c52ab3ce3
+Time.Started.....: Wed Aug 19 14:43:21 2026 (0 secs)
+Time.Estimated...: Wed Aug 19 14:43:21 2026 (0 secs)
+Kernel.Feature...: Pure Kernel
+Guess.Base.......: File (/usr/share/wordlists/rockyou.txt)
+Guess.Queue......: 1/1 (100.00%)
+Speed.#1.........:   909.7 kH/s (0.05ms) @ Accel:256 Loops:1 Thr:1 Vec:8
+Recovered........: 1/1 (100.00%) Digests (total), 1/1 (100.00%) Digests (new)
+Progress.........: 768/14344385 (0.01%)
+Rejected.........: 0/768 (0.00%)
+Restore.Point....: 0/14344385 (0.00%)
+Restore.Sub.#1...: Salt:0 Amplifier:0-1 Iteration:0-1
+Candidate.Engine.: Device Generator
+Candidates.#1....: 123456 -> james1
+Hardware.Mon.#1..: Util: 32%
+
+Started: Wed Aug 19 14:43:11 2026
+Stopped: Wed Aug 19 14:43:23 2026
+                                                                                                                                        
+┌──(kali㉿kali)-[~]
+└─$ hashcat -m 100 -a 0 hash1.txt /usr/share/wordlists/rockyou.txt
+hashcat (v6.2.6) starting
+
+OpenCL API (OpenCL 3.0 PoCL 6.0+debian  Linux, None+Asserts, RELOC, SPIR-V, LLVM 18.1.8, SLEEF, DISTRO, POCL_DEBUG) - Platform #1 [The pocl project]
+====================================================================================================================================================
+* Device #1: cpu-haswell-AMD Ryzen 7 7700X 8-Core Processor, 1438/2941 MB (512 MB allocatable), 3MCU
+
+Minimum password length supported by kernel: 0
+Maximum password length supported by kernel: 256
+
+INFO: All hashes found as potfile and/or empty entries! Use --show to display them.
+
+Started: Wed Aug 19 14:45:12 2026
+Stopped: Wed Aug 19 14:45:12 2026
+                                       ┌──(kali㉿kali)-[~]
+└─$ nc verbal-sleep.picoctf.net 59785
+Welcome!! Looking For the Secret?
+
+We have identified a hash: 482c811da5d5b4bc6d497ffa98491e38
+Enter the password for identified hash: password123
+Correct! You've cracked the MD5 hash with no secret found!
+
+Flag is yet to be revealed!! Crack this hash: b7a875fc1ea228b9061041b7cec4bd3c52ab3ce3
+Enter the password for the identified hash: letmein
+Correct! You've cracked the SHA-1 hash with no secret found!
+
+Almost there!! Crack this hash: 916e8c4f79b25028c9e467f1eb8eee6d6bbdff965f9928310ad30a8d88697745
+Enter the password for the identified hash: qwerty098
+Correct! You've cracked the SHA-256 hash with a secret found. 
+The flag is: picoCTF{UseStr0nG_h@shEs_&PaSswDs!_4c95d69f}
+                                                                                                                                         
+┌──(kali㉿kali)-[~]
+└─$ 
+https://crackstation.net/ - for the fisrt one   
