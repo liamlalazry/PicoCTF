@@ -1,0 +1,1 @@
+forgot to note take this two i was using a simple buffer overflow to overwrite main return address and redirect it to win address as thwere is no pie here after checked with checksec --file
